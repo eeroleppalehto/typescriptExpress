@@ -8,6 +8,19 @@ interface Result {
   ratingDesciption: string
 }
 
+const parseList = (argumentList: string[]): number[] => {
+  if (argumentList.length < 3) throw new Error('No arguments')
+
+  const [a1, a2, ...numArguments] : string[] = argumentList
+
+
+  const convertedNumArgumnets: number[] = numArguments.map(item => Number(item))
+
+  if (convertedNumArgumnets.includes(NaN)) throw new Error('Contains non numeric arguments')
+
+  return convertedNumArgumnets
+}
+
 const calculateExercises = (exercisePerDay: number[]): Result => {
   const numberOfDays = exercisePerDay.length
   const targetValue: number = 2
@@ -36,5 +49,11 @@ const calculateExercises = (exercisePerDay: number[]): Result => {
   }
 }
 
-const exerArr: number[] = [1, 0, 2.5]
-console.log(calculateExercises(exerArr))
+try {
+  const args: number[] = parseList(process.argv)
+  console.log(calculateExercises(args)) 
+} catch (error) {
+  
+}
+
+// TODO: Add missing error handeling from function 'calculateExercises'
