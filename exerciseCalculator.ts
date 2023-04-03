@@ -11,7 +11,7 @@ interface Result {
 const parseList = (argumentList: string[]): number[] => {
   if (argumentList.length < 4) throw new Error('Not enough arguments')
 
-  const [a1, a2, ...numArguments] : string[] = argumentList
+  const [_a1, _a2, ...numArguments] : string[] = argumentList
 
   const convertedNumArgumnets: number[] = numArguments.map(item => Number(item))
 
