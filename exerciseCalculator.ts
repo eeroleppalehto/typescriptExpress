@@ -9,22 +9,21 @@ interface Result {
 }
 
 const parseList = (argumentList: string[]): number[] => {
-  if (argumentList.length < 3) throw new Error('No arguments')
+  if (argumentList.length < 4) throw new Error('Not enough arguments')
 
   const [a1, a2, ...numArguments] : string[] = argumentList
 
-
   const convertedNumArgumnets: number[] = numArguments.map(item => Number(item))
 
-  if (convertedNumArgumnets.includes(NaN)) throw new Error('Contains non numeric arguments')
+  if (convertedNumArgumnets.includes(NaN)) throw new Error('Contains non numeric argument(s)')
 
   return convertedNumArgumnets
 }
 
-const calculateExercises = (exercisePerDay: number[]): Result => {
-  const numberOfDays = exercisePerDay.length
-  const targetValue: number = 2
-  const averageValue: number = exercisePerDay.reduce((acc, curr) => acc + curr, 0)/ numberOfDays
+const calculateExercises = (exerciseArgs: number[]): Result => {
+  const [targetValue, ...exercises]: number[] = exerciseArgs
+  const numberOfDays = exercises.length
+  const averageValue: number = exercises.reduce((acc, curr) => acc + curr, 0)/ numberOfDays
 
   const compareTarget2Average: number = averageValue / targetValue
 
@@ -39,8 +38,8 @@ const calculateExercises = (exercisePerDay: number[]): Result => {
   }
 
   return {
-    periodLength: exercisePerDay.length,
-    trainingDays: exercisePerDay.filter(day => day != 0).length,
+    periodLength: numberOfDays,
+    trainingDays: exercises.filter(day => day != 0).length,
     target: targetValue,
     average: averageValue,
     success: (averageValue >= targetValue),
@@ -52,8 +51,10 @@ const calculateExercises = (exercisePerDay: number[]): Result => {
 try {
   const args: number[] = parseList(process.argv)
   console.log(calculateExercises(args)) 
-} catch (error) {
-  
+} catch (error: unknown) {
+  let errorMessage = 'Unsuspected error: '
+  if (error instanceof Error) {
+    errorMessage += error.message
+  }
+  console.log(errorMessage)
 }
-
-// TODO: Add missing error handeling from function 'calculateExercises'
